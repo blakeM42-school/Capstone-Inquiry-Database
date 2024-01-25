@@ -8,27 +8,33 @@ def load_csv():
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     if file_path:
         data = pd.read_csv(file_path)
-        pt = Table(data_frame, dataframe=data, showtoolbar=False, showstatusbar=True)
-        pt.show()
+        for widget in table_frame.winfo_children():
+            widget.destroy()
+        table = Table(table_frame, dataframe=data, showtoolbar=True, showstatusbar=True)
+        table.show()
 
-# Create the main window
 root = tk.Tk()
-root.title("CSV File Viewer")
+root.title("SUU")
 
-# Create a frame for the Table widget
-data_frame = tk.Frame(root)
-data_frame.pack(fill=tk.BOTH, expand=True)
+root.geometry("1024x600")
 
-# Add a menu bar
-menu_bar = tk.Menu(root)
-root.config(menu=menu_bar)
+header_frame = tk.Frame(root, bg="#990000", height=100)
+header_frame.pack(fill=tk.X, side=tk.TOP)
 
-# Add menu items
-file_menu = tk.Menu(menu_bar, tearoff=0)
-menu_bar.add_cascade(label="File", menu=file_menu)
-file_menu.add_command(label="Open CSV", command=load_csv)
-file_menu.add_separator()
-file_menu.add_command(label="Exit", command=root.destroy)
+title_label = tk.Label(header_frame, text="Student Analyzer", fg="white", bg="#990000", font=("Helvetica", 24))
+title_label.pack(pady=20)
 
-# Run the application
+footer_frame = tk.Frame(root, bg="#cc0000", height=50)
+footer_frame.pack(fill=tk.X, side=tk.BOTTOM)
+
+
+user_label = tk.Label(footer_frame, fg="white", bg="#cc0000", font=("Helvetica", 12))
+user_label.pack(side=tk.LEFT, padx=10)
+
+upload_button = tk.Button(header_frame, text="Upload CSV", command=load_csv, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button.pack(pady=10)
+
+table_frame = tk.Frame(root)
+table_frame.pack(fill=tk.BOTH, expand=True)
+
 root.mainloop()
