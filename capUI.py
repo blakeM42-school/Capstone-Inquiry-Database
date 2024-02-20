@@ -50,9 +50,11 @@ notebook = ttk.Notebook(root)
 
 general_frame = ttk.Frame(notebook)  # General tab content
 audit_frame = ttk.Frame(notebook)    # Audit tab content
+graph_frame = ttk.Frame(notebook)    # Graph tab content
 
 notebook.add(general_frame, text='General')
 notebook.add(audit_frame, text='Audit')
+notebook.add(graph_frame, text='Graph')
 notebook.pack(expand=True, fill='both')
 
 # Now, replicate your existing UI components inside general_frame
