@@ -39,6 +39,12 @@ def filter_and_save():
         selected_column = column_var.get()
         filter_condition = filter_entry.get().strip()  # Get filter condition from entry widget
         result = data[data[selected_column] == filter_condition]
+        
+        additional_column_name = additional_column_entry.get()  # Get additional column name from entry widget
+        additional_filter_condition = additional_filter_entry.get()  # Get additional filter condition from entry widget
+        result = result[result[additional_column_name] == additional_filter_condition]
+        
+        
         save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
         
         if save_path:
@@ -79,6 +85,19 @@ filter_label.pack(pady=5)
 
 filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
 filter_entry.pack(pady=5)
+
+# Additional filter conditions
+additional_column_label = tk.Label(header_frame, text="Enter Additional Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
+additional_column_label.pack(pady=5)
+
+additional_column_entry = tk.Entry(header_frame, font=("Helvetica", 12))
+additional_column_entry.pack(pady=5)
+
+additional_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
+additional_filter_label.pack(pady=5)
+
+additional_filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
+additional_filter_entry.pack(pady=5)
 
 filter_button = tk.Button(header_frame, text="Filter and Save", command=filter_and_save, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 filter_button.pack(pady=5)
