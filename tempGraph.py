@@ -1,7 +1,7 @@
 
 import tkinter as tk
-from tkinter import ttk, colorchooser
-from tkinter import filedialog
+from tkinter import *
+from tkinter import ttk, filedialog
 import pandas as pd
 from pandastable import Table
 import ttkbootstrap as tb
@@ -69,56 +69,53 @@ def open_graph_window():
         ttk.Label(graph_window, text="Graph Type:").pack()
         ttk.OptionMenu(graph_window, graph_type_var, *graph_types).pack(pady=5)
 
-        # Color chooser
-        color_var = tk.StringVar(graph_window)
-        ttk.Button(graph_window, text="Choose Color", command=lambda: choose_color(graph_window, color_var)).pack(pady=5)
-
-        # Initial graph plot
-        plot_graph(graph_window, graph_type_var.get())
-
         # Button to update graph
         ttk.Button(graph_window, text="Update Graph", command=lambda: plot_graph(graph_window, graph_type_var.get())).pack(pady=5)
 
-def choose_color(graph_window, color_var):
-    """Open a color chooser dialog and update the graph color."""
-    color_code = colorchooser.askcolor(title="Choose color")[1]
-    if color_code:
-        color_var.set(color_code)
-        plot_graph(graph_window, graph_type_var.get(), color_code)
-
+        # Initial graph plot
+        plot_graph(graph_window, graph_type_var.get())
+        
 def plot_graph(graph_window, graph_type, color='blue'):
     """Plot and update the graph in the separate window based on user selections."""
-    fig = Figure(figsize=(6, 4), dpi=100)
-    ax = fig.add_subplot(111)
-
-    if graph_type in ["Bar", "Line", "Scatter"]:
-        x_data = data[column_varX.get()]
-        y_data = data[column_varY.get()] if graph_type != "Pie" else data[column_varX.get()].value_counts()
-        
-        if graph_type == "Bar":
-            ax.bar(x_data, y_data, color=color)
-        elif graph_type == "Line":
-            ax.plot(x_data, y_data, color=color)
-        elif graph_type == "Scatter":
-            ax.scatter(x_data, y_data, color=color)
-    elif graph_type == "Pie":
-        y_data.plot(kind='pie', ax=ax, autopct='%1.1f%%', colors=[color])
-    elif graph_type == "Histogram":
-        data[column_varX.get()].plot(kind='hist', ax=ax, color=color)
-
-    # Update labels and title dynamically
-    ax.set_xlabel(column_varX.get())
-    ax.set_ylabel(column_varY.get() if graph_type != "Pie" else "")
-    ax.set_title(f"{graph_type} Graph")
-
     # Clear previous figures
     for widget in graph_window.winfo_children():
         if isinstance(widget, FigureCanvasTkAgg):
             widget.get_tk_widget().destroy()
+   
+    fig = Figure(figsize=(12, 6), dpi=100)
+    ax = fig.add_subplot(111)
 
+    # Generate a color map for unique values on the x-axis
+    unique_vals = data[column_varX.get()].unique()
+    colors = plt.cm.get_cmap('viridis', len(unique_vals))
+
+    if graph_type in ["Bar", "Line", "Scatter"]:
+        for i, val in enumerate(unique_vals):
+            subset = data[data[column_varX.get()] == val]
+            if graph_type == "Bar":
+                ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
+            elif graph_type == "Line":
+                ax.plot(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+            elif graph_type == "Scatter":
+                ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+    elif graph_type == "Pie":
+        counts = data[column_varX.get()].value_counts()
+        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
+    elif graph_type == "Histogram":
+        data[column_varX.get()].hist(ax=ax, bins=len(unique_vals), color=[colors(i) for i in range(len(unique_vals))])
+
+    ax.set_xlabel(column_varX.get())
+    ax.set_ylabel(column_varY.get())
+    ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")
+    # fig.autofmt_xdate(rotation=45)
+    ax.tick_params(axis='x', labelrotation=45, labelsize=8)
+    if graph_type in ["Line", "Scatter"]:
+        ax.legend(title=column_varX.get())
+
+    # Embedding the Matplotlib graph into the Tkinter GUI
     canvas = FigureCanvasTkAgg(fig, master=graph_window)
     canvas.draw()
-    canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 root = tb.Window(themename="superhero")
 root.title("Southern Utah University - College Sort")
@@ -152,35 +149,10 @@ filter_entry.pack(pady=5)
 filter_button = tk.Button(header_frame, text="Filter and Save", command=filter_and_save, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 filter_button.pack(pady=5)
 
-# Added part for graph type selection and plotting
-# graph_type_label = tk.Label(header_frame, text="Select Graph Type:", fg="white", bg="#990000", font=("Helvetica", 12))
-# graph_type_label.pack(pady=5)
-
-# graph_types = ["Bar", "Line", "Scatter"]  # Add more types as needed
 graph_type_var = tk.StringVar()
-# graph_type_var.set(graph_types[0])  # default value
-# graph_type_menu = ttk.OptionMenu(header_frame, graph_type_var, *graph_types)
-# graph_type_menu.pack(pady=5)
-
-# plot_graph_button = tk.Button(header_frame, text="Plot Graph", command=lambda: plot_graph(column_entry.get()), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
-# plot_graph_button.pack(pady=5)
 
 table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
-
-# Frame for plotting graphs
-plot_frame = tk.Frame(root)
-plot_frame.pack(fill=tk.BOTH, expand=True)
-
-# Variable selection for x and y axes
-# x_var = tk.StringVar(root)
-# y_var = tk.StringVar(root)
-# ttk.Label(root, text="X Axis:").pack()
-# x_menu = ttk.OptionMenu(root, x_var, "None")
-# x_menu.pack()
-# ttk.Label(root, text="Y Axis:").pack()
-# y_menu = ttk.OptionMenu(root, y_var, "None")
-# y_menu.pack()
 
 # Column selection for graph plotting
 column_varX = tk.StringVar(root)
