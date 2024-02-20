@@ -104,6 +104,17 @@ def plot_graph(graph_window, graph_type, color='blue'):
     elif graph_type == "Histogram":
         data[column_varX.get()].hist(ax=ax, bins=len(unique_vals), color=[colors(i) for i in range(len(unique_vals))])
 
+    # if graph_type == "Bar":
+    #     data.groupby(column_varX)[column_varY].mean().plot(kind='bar', ax=ax)
+    # elif graph_type == "Line":
+    #     data.plot(kind='line', x=column_varX, y=column_varY, ax=ax)
+    # elif graph_type == "Scatter":
+    #     data.plot(kind='scatter', x=column_varX, y=column_varY, ax=ax)
+    # elif graph_type == "Pie" and column_varY == column_varX:
+    #     data[column_varX].value_counts().plot(kind='pie', ax=ax, autopct='%1.1f%%')
+    # elif graph_type == "Histogram":
+    #     data[column_varX].plot(kind='hist', ax=ax, bins=30)
+
     ax.set_xlabel(column_varX.get())
     ax.set_ylabel(column_varY.get())
     ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")

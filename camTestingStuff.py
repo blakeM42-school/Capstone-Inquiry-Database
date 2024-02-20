@@ -31,7 +31,7 @@ def update_column_options():
 
 def transform_variables(column_name):
     """Transform variables to appropriate types if necessary."""
-    if data[column_name].dtype == np.object:
+    if data[column_name].dtype == np.object_:
         try:
             data[column_name] = pd.to_numeric(data[column_name])
         except ValueError:
