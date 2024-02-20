@@ -39,7 +39,7 @@ def filter_and_save():
 
 root = tb.Window(themename="superhero")
 root.title("Southern Utah University - College Sort")
-root.iconbitmap('Desktop\Capstone Project\download.ico')
+# root.iconbitmap('Desktop\Capstone Project\download.ico')
 root.geometry('500x500')
 
 header_frame = tk.Frame(root, bg="#990000", height=150)
