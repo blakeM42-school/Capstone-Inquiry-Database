@@ -28,10 +28,11 @@ def load_csv():
             data = pd.read_csv(file_path, encoding='utf-8')
             for widget in table_frame.winfo_children():
                 widget.destroy()
-            table = Table(table_frame, dataframe=data, showtoolbar=True, showstatusbar=True)
+            table = Table(table_frame, dataframe=data, showstatusbar=True) # Removed 'showtoolbar' option from table, can add back later if need be/want to
             table.show()
             
             column_name_combobox['values'] = data.columns.tolist()
+            column_name_combobox2['values'] = data.columns.tolist()
             column_menu1['values'] = data.columns.tolist()
             column_menu2['values'] = data.columns.tolist()
             if data.columns.tolist():
@@ -189,7 +190,6 @@ table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
 # You can create a separate UI for the 'Audit' tab in audit_frame
 # For example, just a label for now
-
 
 header_frame2 = tk.Frame(audit_frame, bg="#990000", height=150)
 header_frame2.pack(fill=tk.X, side=tk.TOP)

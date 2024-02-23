@@ -14,6 +14,7 @@ data = None  # Global variable to store loaded data
 root = tb.Window(themename="superhero")
 root.title("Southern Utah University - College Sort")
 root.geometry('500x500')
+# graph_window = None
 
 def load_csv():
     """Load a CSV file and display its contents."""
@@ -66,14 +67,10 @@ def open_graph_window():
         graph_window = tk.Toplevel(root)
         graph_window.title("Graph Customization")
 
-        # Scrollable Canvas Setup
-        # canvas = tk.Canvas(graph_window)
-        # scrollbar = tk.Scrollbar(graph_window, orient="vertical", command=canvas.yview)
-        # scrollable_frame = ttk.Frame(canvas)
-
-        # canvas.configure(yscrollcommand=scrollbar.set)
-        # canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        # canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        # ttk.Label(graph_window, text="Select X-Axis:").pack()
+        # column_menu1.pack(pady=5)
+        # ttk.Label(graph_window, text="Select Y-Axis:").pack()
+        # column_menu2.pack(pady=5)
 
         # Dropdown for selecting the graph type
         graph_type_var = tk.StringVar(graph_window)
@@ -85,59 +82,8 @@ def open_graph_window():
         # Button to update graph
         ttk.Button(graph_window, text="Update Graph", command=lambda: plot_graph(graph_window, graph_type_var.get())).pack(pady=5)
 
-        # Graph Type and Update Button
-        # graph_type_var = tk.StringVar(scrollable_frame)
-        # graph_types = ["Bar", "Line", "Scatter", "Pie", "Histogram"]
-        # graph_type_var.set(graph_types[0])
-        # ttk.OptionMenu(scrollable_frame, graph_type_var, *graph_types).grid(row=2, column=0, columnspan=2)
-        # ttk.Button(scrollable_frame, text="Update Graph", command=lambda: plot_graph(scrollable_frame, graph_type_var.get())).grid(row=3, column=0, columnspan=2)
-
-        # scrollbar.pack(side="right", fill="y")
-        # canvas.pack(side="left", fill="both", expand=True)
-
         # Initial graph plot
         plot_graph(graph_window, graph_type_var.get())
-        # plot_graph(scrollable_frame, graph_type_var.get())
-
-# def open_graph_window():
-#     global data, x_var_graph, y_var_graph
-#     if data is not None:
-#         graph_window = tk.Toplevel(root)
-#         graph_window.title("Graph Customization")
-
-#         # Scrollable Canvas Setup
-#         canvas = tk.Canvas(graph_window)
-#         scrollbar = tk.Scrollbar(graph_window, orient="vertical", command=canvas.yview)
-#         scrollable_frame = ttk.Frame(canvas)
-
-#         canvas.configure(yscrollcommand=scrollbar.set)
-#         canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-#         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-#         # Variable Selection Setup
-#         x_var_graph = tk.StringVar(scrollable_frame)
-#         y_var_graph = tk.StringVar(scrollable_frame)
-#         x_var_graph.set(data.columns[0])
-#         y_var_graph.set(data.columns[1] if len(data.columns) > 1 else data.columns[0])
-
-#         ttk.Label(scrollable_frame, text="X Axis:").grid(row=0, column=0)
-#         x_menu_graph = ttk.OptionMenu(scrollable_frame, x_var_graph, *data.columns)
-#         x_menu_graph.grid(row=0, column=1)
-
-#         ttk.Label(scrollable_frame, text="Y Axis:").grid(row=1, column=0)
-#         y_menu_graph = ttk.OptionMenu(scrollable_frame, y_var_graph, *data.columns)
-#         y_menu_graph.grid(row=1, column=1)
-
-#         # Graph Type and Update Button
-#         graph_type_var = tk.StringVar(scrollable_frame)
-#         graph_types = ["Bar", "Line", "Scatter", "Pie", "Histogram"]
-#         graph_type_var.set(graph_types[0])
-#         ttk.OptionMenu(scrollable_frame, graph_type_var, *graph_types).grid(row=2, column=0, columnspan=2)
-#         ttk.Button(scrollable_frame, text="Update Graph", command=lambda: plot_graph(scrollable_frame, graph_type_var.get())).grid(row=3, column=0, columnspan=2)
-
-#         scrollbar.pack(side="right", fill="y")
-#         canvas.pack(side="left", fill="both", expand=True)
-
         
 def plot_graph(graph_window, graph_type, color='blue'):
     """Plot and update the graph in the separate window based on user selections."""
@@ -217,14 +163,13 @@ table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
 
 # Column selection for graph plotting
-# Obtaining error from 'menu' when changing 'OptionMenu' to 'Combobox'
 column_varX = tk.StringVar(root)
 column_varY = tk.StringVar(root)
 ttk.Label(root, text="Select X-Axis:").pack()
-column_menu1 = ttk.OptionMenu(root, column_varX, "None")
+column_menu1 = ttk.Combobox(root, textvariable=column_varX, state="readonly")
 column_menu1.pack(pady=5)
 ttk.Label(root, text="Select Y-Axis:").pack()
-column_menu2 = ttk.OptionMenu(root, column_varY, "None")
+column_menu2 = ttk.Combobox(root, textvariable=column_varY, state="readonly")
 column_menu2.pack(pady=5)
 
 ttk.Button(root, text="Open Graph Window", command=open_graph_window).pack()
