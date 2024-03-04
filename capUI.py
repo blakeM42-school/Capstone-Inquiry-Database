@@ -12,7 +12,8 @@ root = tb.Window(themename="superhero")
 root.title("Southern Utah University - College Sort")
 root.geometry('500x500')
 
-column_var = tk.StringVar()
+column_var1 = tk.StringVar()
+column_var2 = tk.StringVar()
 column_varX = tk.StringVar(root)
 column_varY = tk.StringVar(root)
 
@@ -21,7 +22,7 @@ data = None  # Global variable to store loaded data
 
 def load_csv():
     """Load a CSV file and display its contents."""
-    global data, column_var, column_varX, column_varY  # Use the global variable to store loaded data
+    global data, column_var1, column_var2, column_varX, column_varY  # Use the global variable to store loaded data
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     if file_path:
         try:
@@ -31,12 +32,14 @@ def load_csv():
             table = Table(table_frame, dataframe=data, showstatusbar=True) # Removed 'showtoolbar' option from table, can add back later if need be/want to
             table.show()
             
-            column_name_combobox['values'] = data.columns.tolist()
-            column_name_combobox2['values'] = data.columns.tolist()
+            columns = data.columns.tolist()
+            column_name_combobox['values'] = columns
+            column_name_combobox2['values'] = columns
             column_menu1['values'] = data.columns.tolist()
             column_menu2['values'] = data.columns.tolist()
-            if data.columns.tolist():
-                column_var.set(data.columns.tolist()[0])  # Set the default value to the first column name
+            if columns:
+                column_var1.set(data.columns.tolist()[0])  # Set the default value to the first column name
+                column_var2.set(data.columns.tolist()[0])
                 column_varX.set(data.columns.tolist()[0])
                 column_varY.set(data.columns.tolist()[0])
         except UnicodeDecodeError:
@@ -47,13 +50,13 @@ def filter_and_save():
     """Filter the loaded data and save it as a new CSV file."""
     global data  # Access the global variable containing loaded data
     if data is not None:
-        selected_column = column_var.get()
+        selected_column = column_var1.get()
         filter_condition = filter_entry.get().strip()  # Get filter condition from entry widget
-        result = data[data[selected_column] == filter_condition]
+        additional_selected_column = column_var2.get()  # Get additional column name from entry widget
+        additional_filter_condition = additional_filter_entry.get().strip()  # Get additional filter condition from entry widget
         
-        additional_column_name = additional_column_entry.get()  # Get additional column name from entry widget
-        additional_filter_condition = additional_filter_entry.get()  # Get additional filter condition from entry widget
-        result = result[result[additional_column_name] == additional_filter_condition]
+        result = data[data[selected_column] == filter_condition]
+        result = data[data[additional_selected_column] == additional_filter_condition]
         
         
         save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
@@ -161,8 +164,9 @@ user_label.pack(side=tk.LEFT, padx=10)
 upload_button = tk.Button(header_frame, text="Upload CSV", command=load_csv, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button.pack(pady=5)
 
-column_name_combobox = ttk.Combobox(header_frame, textvariable=column_var, state="readonly")
+column_name_combobox = ttk.Combobox(header_frame, textvariable=column_var1, state="readonly")
 column_name_combobox.pack(pady=5)
+
 
 filter_label = tk.Label(header_frame, text="Enter Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
 filter_label.pack(pady=5)
@@ -174,8 +178,8 @@ filter_entry.pack(pady=5)
 additional_column_label = tk.Label(header_frame, text="Enter Additional Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
 additional_column_label.pack(pady=5)
 
-additional_column_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-additional_column_entry.pack(pady=5)
+column_name_combobox2 = ttk.Combobox(header_frame, textvariable=column_var2, state="readonly")
+column_name_combobox2.pack(pady=5)
 
 additional_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
 additional_filter_label.pack(pady=5)
@@ -203,7 +207,7 @@ user_label2.pack(side=tk.LEFT, padx=10)
 upload_button2 = tk.Button(header_frame2, text="Upload CSV", command=load_csv, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button2.pack(pady=5)
 
-column_name_combobox2 = ttk.Combobox(header_frame2, textvariable=column_var, state="readonly")
+column_name_combobox2 = ttk.Combobox(header_frame2, textvariable=column_var1, state="readonly")
 column_name_combobox2.pack(pady=5)
 
 filter_label2 = tk.Label(header_frame2, text="Enter Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
