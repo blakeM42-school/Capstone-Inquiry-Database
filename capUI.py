@@ -14,6 +14,7 @@ root.geometry('500x500')
 
 column_var1 = tk.StringVar()
 column_var2 = tk.StringVar()
+column_var3 = tk.StringVar()
 column_var_audit = tk.StringVar()
 column_varX = tk.StringVar(root)
 column_varY = tk.StringVar(root)
@@ -23,7 +24,7 @@ data = None  # Global variable to store loaded data
 
 def load_csv():
     """Load a CSV file and display its contents."""
-    global data, column_var1, column_var2, column_var_audit, column_varX, column_varY  # Use the global variable to store loaded data
+    global data, column_var1, column_var2, column_var3, column_var_audit, column_varX, column_varY  # Use the global variable to store loaded data
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     if file_path:
         try:
@@ -37,11 +38,13 @@ def load_csv():
             column_name_combobox['values'] = columns
             column_name_combobox2['values'] = columns
             column_name_combobox3['values'] = columns
+            column_name_combobox4['values'] = columns
             column_menu1['values'] = columns
             column_menu2['values'] = columns
             if columns:
                 column_var1.set(data.columns.tolist()[0])  # Set the default value to the first column name
                 column_var2.set(data.columns.tolist()[0])
+                column_var3.set(data.columns.tolist()[0])
                 column_var_audit.set(data.columns.tolist()[0])
                 column_varX.set(data.columns.tolist()[0])
                 column_varY.set(data.columns.tolist()[0])
@@ -53,23 +56,38 @@ def filter_and_save():
     """Filter the loaded data and save it as a new CSV file."""
     global data   # Access the global variable containing loaded data
     if data is not None:
+
+        print(data.head())  # Prints the first 5 rows of the DataFrame
+
         selected_column = column_var1.get()
         filter_condition = filter_entry.get().strip()  # Get filter condition from entry widget
         additional_selected_column = column_var2.get()  # Get additional column name from entry widget
         additional_filter_condition = additional_filter_entry.get().strip()  # Get additional filter condition from entry widget
-
+        last_selected_column = column_var3.get()
+        last_filter_condition = last_filter_entry.get().strip()
         audit_selected_column = column_var_audit.get()
         audit_filter_condition = filter_entry.get().strip()
 
+    
+
         result = data
         if selected_column and filter_condition:
-            result = result[result[selected_column] == filter_condition]
-        if additional_selected_column and additional_filter_condition:
-            result = result[result[additional_selected_column] == additional_filter_condition]
-
-        if audit_selected_column and audit_filter_condition:
-            result = result[data[audit_selected_column] == audit_filter_condition]
+            result = result[result[selected_column].astype(str).str.strip() == filter_condition]
         
+        if additional_selected_column and additional_filter_condition:
+            result = result[result[additional_selected_column].astype(str).str.strip() == additional_filter_condition]
+        
+        if last_selected_column and last_filter_condition:
+            result = result[result[last_selected_column].astype(str).str.strip() == last_filter_condition]
+
+        # if audit_selected_column and audit_filter_condition:
+        #     result = result[data[audit_selected_column] == audit_filter_condition]
+        
+        print(f"Filter on {selected_column} for {filter_condition}")
+        print(f"Data type in DataFrame: {data[selected_column].dtype}")
+        print(f"Type of filter condition: {type(filter_condition)}")
+    
+
         if not result.empty:
             save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
             if save_path:
@@ -164,44 +182,61 @@ notebook.add(audit_frame, text='Audit')
 notebook.pack(expand=True, fill='both')
 
 # Now, replicate your existing UI components inside general_frame
-# For example:
 header_frame = tk.Frame(general_frame, bg="#990000", height=150)
 header_frame.pack(fill=tk.X, side=tk.TOP)
+header_frame.grid_columnconfigure(0, weight=1)
+header_frame.grid_columnconfigure(1, weight=1)
+header_frame.grid_columnconfigure(2, weight=1)
+
 
 footer_frame = tk.Frame(general_frame, bg="#cc0000", height=50)
-footer_frame.pack(fill=tk.X, side=tk.BOTTOM)
 
 user_label = tk.Label(footer_frame, fg="white", bg="#cc0000", font=("Helvetica", 12))
-user_label.pack(side=tk.LEFT, padx=10)
 
 upload_button = tk.Button(header_frame, text="Upload CSV", command=load_csv, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
-upload_button.pack(pady=5)
+upload_button.grid(row=0, column=1, columnspan=1, sticky='ew', padx=10, pady=5)
+
+column_label = tk.Label(header_frame, text="Enter Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
+column_label.grid(row=1, column=0, padx=10, pady=5, sticky='ew')
 
 column_name_combobox = ttk.Combobox(header_frame, textvariable=column_var1, state="readonly")
-column_name_combobox.pack(pady=5)
-
+column_name_combobox.grid(row=2, column=0, padx=10, pady=5, sticky='ew')
 
 filter_label = tk.Label(header_frame, text="Enter Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
-filter_label.pack(pady=5)
+filter_label.grid(row=3, column=0, padx=10, pady=5, sticky='ew')
 
 filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-filter_entry.pack(pady=5)
+filter_entry.grid(row=4, column=0, padx=10, pady=5, sticky='ew')
 
 # Additional filter conditions
 additional_column_label = tk.Label(header_frame, text="Enter Additional Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
-additional_column_label.pack(pady=5)
+additional_column_label.grid(row=1, column=1, padx=10, pady=5, sticky='ew')
 
 column_name_combobox2 = ttk.Combobox(header_frame, textvariable=column_var2, state="readonly")
-column_name_combobox2.pack(pady=5)
+column_name_combobox2.grid(row=2, column=1, padx=10, pady=5, sticky='ew')
 
 additional_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
-additional_filter_label.pack(pady=5)
+additional_filter_label.grid(row=3, column=1, padx=10, pady=5, sticky='ew')
 
 additional_filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-additional_filter_entry.pack(pady=5)
+additional_filter_entry.grid(row=4, column=1, padx=10, pady=5, sticky='ew')
+
+#last filter conditions
+last_column_label = tk.Label(header_frame, text="Enter Additional Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
+last_column_label.grid(row=1, column=2, padx=10, pady=5, sticky='ew')
+
+column_name_combobox4 = ttk.Combobox(header_frame, textvariable=column_var3, state="readonly")
+column_name_combobox4.grid(row=2, column=2, padx=10, pady=5, sticky='ew')
+
+last_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
+last_filter_label.grid(row=3, column=2, padx=10, pady=5, sticky='ew')
+
+
+last_filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
+last_filter_entry.grid(row=4, column=2, padx=10, pady=5, sticky='ew')
 
 filter_button = tk.Button(header_frame, text="Filter and Save", command=filter_and_save, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
-filter_button.pack(pady=5)
+filter_button.grid(row=5, column=1, columnspan=1, sticky='ew', padx=10, pady=10)
 
 table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
