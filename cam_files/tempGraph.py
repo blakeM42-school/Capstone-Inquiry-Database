@@ -12,12 +12,15 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 ### TO_DO LIST ###
 # [IN PROGRESS] 1. Figure out how to replace old graph with new graph [Ended up moving graphing options outside of graph window so input is entered beforehand]
-# [DONE] 2. Add feature for changing color palette on graph if need be [DONE]
-# [IN PROGRESS] 3. Add more graph types [Currently have Bar, Line, Scatter, Pie, & Histogram]
-# [IN PROGRESS] 3a. Need to fix histogram graphing functionality
+# [DONE] 2. Add feature for changing color palette on graph if need be
+#        2a. Add additional color palettes if need be
+# [IN PROGRESS] 3. Add more graph types [Currently have Bar, Line, Scatter, Pie, & Histogram; Maybe add Box, Clustered Bar, Column, Area, Waterfall, Dot, etc.]
+#               3a. Need to fix histogram graphing functionality
 # [DONE] 4. Make buttons side by side instead of on top of each other [DONE]
-# [IN PROGRESS] 5. Make bar plot interactive 
-# 6. //
+# [IN PROGRESS] 5. Make plots interactive 
+# 6. Possibly add line of best fit to scatterplot
+# 7. //
+# Need to ask stakeholder if she would prefer separate window containing graph or separate frame (i.e., general, audit, graph) containg graph & graphing options
 
 data = None  # Global variable to store loaded data
 root = tb.Window(themename="superhero")
@@ -92,7 +95,7 @@ def open_graph_window():
         
 def plot_graph(graph_window, graph_type, color='blue'):
     """Plot and update the graph in the separate window based on user selections."""
-    # Clear previous figures [NEED TO FIX]
+    # Clear previous figures [NEED TO FIX; NEW GRAPH NOT REPLACING OLD GRAPH]
     # for widget in graph_window.winfo_children():
     #     if isinstance(widget, FigureCanvasTkAgg) or isinstance(widget, NavigationToolbar2Tk):
     #         # widget.get_tk_widget().destroy()
@@ -182,6 +185,8 @@ column_varY = tk.StringVar(root)
 
 graph_button_frame = Frame(root)
 graph_button_frame.pack()
+
+column_menu1_label = ttk.Label(graph_button_frame, text="Select X-Axis")
 
 column_menu1_label = ttk.Label(graph_button_frame, text="Select X-Axis")
 column_menu1_label.grid(row=0, column=0, padx=5, pady=5)
