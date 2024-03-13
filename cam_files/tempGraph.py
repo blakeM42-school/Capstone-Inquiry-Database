@@ -19,7 +19,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 # [DONE] 4. Make buttons side by side instead of on top of each other [DONE]
 # [IN PROGRESS] 5. Make plots interactive 
 # 6. Possibly add line of best fit to scatterplot
-# 7. //
+# 7. Create function for scatterplot matrix
 # Need to ask stakeholder if she would prefer separate window containing graph or separate frame (i.e., general, audit, graph) containg graph & graphing options
 
 data = None  # Global variable to store loaded data
