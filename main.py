@@ -188,7 +188,9 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         colors = plt.cm.get_cmap('jet', len(unique_vals))
     elif colors == "nipy_spectral":
         colors = plt.cm.get_cmap('nipy_spectral', len(unique_vals))
-    # Add more color types if needed as project continues
+
+    # Mapping categories to colors
+    color_dict = {val: colors(i) for i, val in enumerate(unique_vals)}
 
     # Generate graph based on selected input
     if graph_type == "Bar":
@@ -196,20 +198,26 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         for i, val in enumerate(unique_vals):
             subset = data[data[column_varX.get()] == val]
             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
+
     elif graph_type == "Line":
         # Assuming the data is sequential or has a meaningful order. Sort if necessary.
         data_sorted = data.sort_values(by=column_varX.get())
         ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+
     elif graph_type == "Scatter":
         # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
-        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
+        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))])  # Color each point uniquely or use a single color.
+
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
         ax.axis('equal')
+
     elif graph_type == "Histogram":
-        column_data = data[column_varX.get()]  # Actual data for the histogram
-        if is_numeric_dtype(column_data): # Check if data is numeric
+        # Actual data for the histogram
+        column_data = data[column_varX.get()]
+        # Check if data is numeric 
+        if is_numeric_dtype(column_data): 
             mu, sigma = np.mean(column_data), np.std(column_data)  # Mean and standard deviation
             # Plot histogram
             n, bins, patches = ax.hist(column_data, bins='auto', color='skyblue', alpha=0.7, rwidth=0.85, density=True)
@@ -219,7 +227,6 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         else: # Display error and close graph window if data is not numeric
             tk.messagebox.showwarning(title=None, message="Invalid type of data. Please enter numeric data.")
             graph_window.exit()
-    # Add more graph types if needed as project continues
 
     # Set labels for graph
     ax.set_xlabel(column_varX.get())
@@ -231,7 +238,9 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         ax.set_ylabel("Density")
         ax.set_title(f"{graph_type} of {column_varX.get()}")
 
+    # Rotate x-axis labels so they fit in window
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
+    # Add legend if graph type is line or scatter
     if graph_type in ["Line", "Scatter"]:
         ax.legend(title=column_varX.get())
 

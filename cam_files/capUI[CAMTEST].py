@@ -91,6 +91,13 @@ def open_graph_window():
         # Initial graph plot
         plot_graph(graph_window, graph_type_var.get(), graph_color_var.get())
         
+def convert_to_numeric(column):
+    """Try to convert a DataFrame column to numeric, return the column unchanged if conversion fails."""
+    try:
+        return pd.to_numeric(column)
+    except ValueError:
+        return column
+    
 def plot_graph(graph_window, graph_type, colors, color='blue'):
     """Plot and update the graph in the separate window based on user selections."""
     # Create figure for desired graph for plotting   
@@ -117,34 +124,38 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         colors = plt.cm.get_cmap('nipy_spectral', len(unique_vals))
     # Add more color types if needed as project continues
 
-    # For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
-    # Generate graph based on selected input
-    # if graph_type in ["Bar", "Line", "Scatter"]:
-    #     for i, val in enumerate(unique_vals):
-    #         subset = data[data[column_varX.get()] == val]
-    #         if graph_type == "Bar":
-    #             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
-    #         elif graph_type == "Line":
-    #             subset_sorted = subset.sort_values(by=column_varX.get())
-    #             ax.plot(subset_sorted[column_varX.get()], subset_sorted[column_varY.get()], color=color, label=val)
-    #         elif graph_type == "Scatter":
-    #             ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
     if graph_type == "Bar":
         # For each unique value in the x-axis column, plot a bar with the mean of the y-axis values.
         for i, val in enumerate(unique_vals):
             subset = data[data[column_varX.get()] == val]
             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
-    elif graph_type == "Line":
-        # Assuming the data is sequential or has a meaningful order. Sort if necessary.
-        data_sorted = data.sort_values(by=column_varX.get())
-        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
-    elif graph_type == "Scatter":
-        # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
-        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
+
+    # elif graph_type == "Line":
+    #     # Assuming the data is sequential or has a meaningful order. Sort if necessary.
+    #     data_sorted = data.sort_values(by=column_varX.get())
+    #     ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+
+    # elif graph_type == "Scatter":
+    #     # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
+    #     ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
+            
+    elif graph_type == "Line" or graph_type == "Scatter":
+    # Convert the columns to numeric if they are not already
+        data[column_varX.get()] = convert_to_numeric(data[column_varX.get()])
+        data[column_varY.get()] = convert_to_numeric(data[column_varY.get()])
+        
+        if graph_type == "Line":
+            # Sort data if column_varX is convertible to numeric
+            data_sorted = data.sort_values(by=column_varX.get())
+            ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')
+        elif graph_type == "Scatter":
+            ax.scatter(data[column_varX.get()], data[column_varY.get()], c='blue', label='Scatter Plot')
+
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))], startangle=90)
         ax.axis('equal')
+
     elif graph_type == "Histogram":
         column_data = data[column_varX.get()]  # Actual data for the histogram
         if is_numeric_dtype(column_data): # Check if data is numeric
@@ -157,7 +168,6 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         else: # Display error and close graph window if data is not numeric
             tk.messagebox.showwarning(title=None, message="Invalid type of data. Please enter numeric data.")
             graph_window.exit()
-    # Add more graph types if needed as project continues
 
     # Set labels for graph
     ax.set_xlabel(column_varX.get())
