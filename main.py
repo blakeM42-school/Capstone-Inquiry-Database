@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, ttk
 import pandas as pd
+import numpy as np
 from pandastable import Table
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 import matplotlib.pyplot as plt
+from scipy.stats import norm
+from pandas.api.types import is_numeric_dtype
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
@@ -159,8 +162,17 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         counts = data[column_varX.get()].value_counts()
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
     elif graph_type == "Histogram":
-        # column_varY = None
-        data[column_varX.get()].hist(ax=ax, bins=len(unique_vals), color=[colors(i) for i in range(len(unique_vals))])
+        column_data = data[column_varX.get()]  # Actual data for the histogram
+        if is_numeric_dtype(column_data): # Check if data is numeric
+            mu, sigma = np.mean(column_data), np.std(column_data)  # Mean and standard deviation
+            # Plot histogram
+            n, bins, patches = ax.hist(column_data, bins='auto', color='skyblue', alpha=0.7, rwidth=0.85, density=True)
+            # Add a line of best fit (normal PDF)
+            y = norm.pdf(bins, mu, sigma)
+            ax.plot(bins, y, '--', color='red')  # Red dashed line for best fit
+        else: # Display error and close graph window if data is not numeric
+            tk.messagebox.showwarning(title=None, message="Invalid type of data. Please enter numeric data.")
+            graph_window.exit()
     # Add more graph types if needed as project continues
 
     # Set labels for graph
@@ -168,12 +180,10 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     ax.set_ylabel(column_varY.get())
     ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")
 
-    # if graph_type == "Bar" | graph_type == "Line" | graph_type == "Pie":
-    #     ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")
-    # elif graph_type == "Scatter": 
-    #     ax.set_title(f"{graph_type} Plot of {column_varX.get()} vs. {column_varY.get()}")
-    # elif graph_type == "Histogram":
-    #     ax.set_title(f"{graph_type} of {column_varX.get()} vs. {column_varY.get()}")
+    # Change labels if histogram
+    if graph_type == "Histogram":
+        ax.set_ylabel("Density")
+        ax.set_title(f"{graph_type} of {column_varX.get()}")
 
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     if graph_type in ["Line", "Scatter"]:
