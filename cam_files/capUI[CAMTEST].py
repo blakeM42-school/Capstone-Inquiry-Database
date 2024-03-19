@@ -1,11 +1,14 @@
 import tkinter as tk
 from tkinter import filedialog, ttk
 import pandas as pd
+import numpy as np
 from pandastable import Table
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+from scipy.stats import norm
+from pandas.api.types import is_numeric_dtype
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 root = tb.Window(themename="superhero")
@@ -115,21 +118,44 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     # Add more color types if needed as project continues
 
     # Generate graph based on selected input
-    if graph_type in ["Bar", "Line", "Scatter"]:
+    # if graph_type in ["Bar", "Line", "Scatter"]:
+    #     for i, val in enumerate(unique_vals):
+    #         subset = data[data[column_varX.get()] == val]
+    #         if graph_type == "Bar":
+    #             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
+    #         elif graph_type == "Line":
+    #             subset_sorted = subset.sort_values(by=column_varX.get())
+    #             ax.plot(subset_sorted[column_varX.get()], subset_sorted[column_varY.get()], color=color, label=val)
+    #         elif graph_type == "Scatter":
+    #             ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+    if graph_type == "Bar":
+        # For each unique value in the x-axis column, plot a bar with the mean of the y-axis values.
         for i, val in enumerate(unique_vals):
             subset = data[data[column_varX.get()] == val]
-            if graph_type == "Bar":
-                ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
-            elif graph_type == "Line":
-                ax.plot(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
-            elif graph_type == "Scatter":
-                ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+            ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
+    elif graph_type == "Line":
+        # Assuming the data is sequential or has a meaningful order. Sort if necessary.
+        data_sorted = data.sort_values(by=column_varX.get())
+        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+    elif graph_type == "Scatter":
+        # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
+        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
-        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
+        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))], startangle=90)
+        ax.axis('equal')
     elif graph_type == "Histogram":
-        # column_varY = None
-        data[column_varX.get()].hist(ax=ax, bins=len(unique_vals), color=[colors(i) for i in range(len(unique_vals))])
+        column_data = data[column_varX.get()]  # Actual data for the histogram
+        if is_numeric_dtype(column_data): # Check if data is numeric
+            mu, sigma = np.mean(column_data), np.std(column_data)  # Mean and standard deviation
+            # Plot histogram
+            n, bins, patches = ax.hist(column_data, bins='auto', color='skyblue', alpha=0.7, rwidth=0.85, density=True)
+            # Add a line of best fit (normal PDF)
+            y = norm.pdf(bins, mu, sigma)
+            ax.plot(bins, y, '--', color='red')  # Red dashed line for best fit
+        else: # Display error and close graph window if data is not numeric
+            tk.messagebox.showwarning(title=None, message="Invalid type of data. Please enter numeric data.")
+            graph_window.exit()
     # Add more graph types if needed as project continues
 
     # Set labels for graph
@@ -137,12 +163,10 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     ax.set_ylabel(column_varY.get())
     ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")
 
-    # if graph_type == "Bar" | graph_type == "Line" | graph_type == "Pie":
-    #     ax.set_title(f"{graph_type} Graph of {column_varX.get()} vs. {column_varY.get()}")
-    # elif graph_type == "Scatter": 
-    #     ax.set_title(f"{graph_type} Plot of {column_varX.get()} vs. {column_varY.get()}")
-    # elif graph_type == "Histogram":
-    #     ax.set_title(f"{graph_type} of {column_varX.get()} vs. {column_varY.get()}")
+    # Change labels if histogram
+    if graph_type == "Histogram":
+        ax.set_ylabel("Density")
+        ax.set_title(f"{graph_type} of {column_varX.get()}")
 
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     if graph_type in ["Line", "Scatter"]:
@@ -157,7 +181,6 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     toolbar = GraphNavigationToolbar(canvas, graph_window)
     toolbar.update()
     # canvas.get_tk_widget().pack()
-
 
 class GraphNavigationToolbar(NavigationToolbar2Tk):
     # Class for navigation bar
