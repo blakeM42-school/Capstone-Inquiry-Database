@@ -57,37 +57,79 @@ def filter_and_save():
     """Filter the loaded data and save it as a new CSV file."""
     global data   # Access the global variable containing loaded data
     if data is not None:
-
-        print(data.head())  # Prints the first 5 rows of the DataFrame
-
         selected_column = column_var1.get()
         filter_condition = filter_entry.get().strip()  # Get filter condition from entry widget
         additional_selected_column = column_var2.get()  # Get additional column name from entry widget
         additional_filter_condition = additional_filter_entry.get().strip()  # Get additional filter condition from entry widget
         last_selected_column = column_var3.get()
         last_filter_condition = last_filter_entry.get().strip()
+        selected_operator = operator_var.get().strip()
+        selected_operator2 = operator_var2.get().strip()
+        selected_operator3 = operator_var3.get().strip()
         audit_selected_column = column_var_audit.get()
         audit_filter_condition = filter_entry.get().strip()
 
+        try:
+            numeric_filter_condition = float(filter_condition)
+            is_numeric = True
+        except ValueError:
+            numeric_filter_condition = filter_condition  
+            is_numeric = False
     
+        result = data.copy()
+        if selected_column and filter_condition and selected_operator in ['=']:
+            result = result[result[selected_column].astype(str).str.strip() == filter_condition] 
+        
+        if selected_operator in ['<'] and is_numeric:
+            result = result[data[selected_column].astype(float) < numeric_filter_condition]
+        elif selected_operator in ['<='] and is_numeric:
+            result = result[data[selected_column].astype(float) <= numeric_filter_condition]
+        elif selected_operator in ['>'] and is_numeric:
+            result = result[data[selected_column].astype(float) > numeric_filter_condition]
+        elif selected_operator in ['>='] and is_numeric:
+            result = result[data[selected_column].astype(float) >= numeric_filter_condition]
+        
 
-        result = data
-        if selected_column and filter_condition:
-            result = result[result[selected_column].astype(str).str.strip() == filter_condition]
+        try:
+            numeric_filter_condition2 = float(additional_filter_condition)
+        except ValueError:
+            numeric_filter_condition2 = additional_filter_condition
+            is_numeric = False
         
-        if additional_selected_column and additional_filter_condition:
+        if additional_selected_column and additional_filter_condition and selected_operator2 in ['=']:
             result = result[result[additional_selected_column].astype(str).str.strip() == additional_filter_condition]
-        
-        if last_selected_column and last_filter_condition:
+
+        if selected_operator2 in ['<'] and is_numeric:
+            result = result[data[additional_selected_column].astype(float) < numeric_filter_condition2]
+        elif selected_operator2 in ['<='] and is_numeric:
+            result = result[data[additional_selected_column].astype(float) <= numeric_filter_condition2]
+        elif selected_operator2 in ['>'] and is_numeric:
+            result = result[data[additional_selected_column].astype(float) > numeric_filter_condition2]
+        elif selected_operator2 in ['>='] and is_numeric:
+            result = result[data[additional_selected_column].astype(float) >= numeric_filter_condition2]
+
+
+        try:
+            numeric_filter_condition3 = float(last_filter_condition)
+        except ValueError:
+            numeric_filter_condition3 = last_filter_condition
+            is_numeric = False
+            
+        if last_selected_column and last_filter_condition and selected_operator3 in ['=']:
             result = result[result[last_selected_column].astype(str).str.strip() == last_filter_condition]
+
+        if selected_operator3 in ['<'] and is_numeric:
+            result = result[data[last_selected_column].astype(float) < numeric_filter_condition3]
+        elif selected_operator3 in ['<='] and is_numeric:
+            result = result[data[last_selected_column].astype(float) <= numeric_filter_condition3]
+        elif selected_operator3 in ['>'] and is_numeric:
+            result = result[data[last_selected_column].astype(float) > numeric_filter_condition3]
+        elif selected_operator3 in ['>='] and is_numeric:
+            result = result[data[last_selected_column].astype(float) >= numeric_filter_condition3]
 
         # if audit_selected_column and audit_filter_condition:
         #     result = result[data[audit_selected_column] == audit_filter_condition]
         
-        print(f"Filter on {selected_column} for {filter_condition}")
-        print(f"Data type in DataFrame: {data[selected_column].dtype}")
-        print(f"Type of filter condition: {type(filter_condition)}")
-    
 
         if not result.empty:
             save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
@@ -202,10 +244,8 @@ audit_frame = ttk.Frame(notebook)    # Audit tab content
 
 notebook.add(general_frame, text='General')
 notebook.add(audit_frame, text='Audit')
-# notebook.add(graph_frame, text='Graph')
 notebook.pack(expand=True, fill='both')
 
-# Now, replicate your existing UI components inside general_frame
 header_frame = tk.Frame(general_frame, bg="#990000", height=150)
 header_frame.pack(fill=tk.X, side=tk.TOP)
 header_frame.grid_columnconfigure(0, weight=1)
@@ -288,8 +328,7 @@ filter_button.grid(row=7, column=1, columnspan=1, sticky='ew', padx=10, pady=10)
 
 table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
-# You can create a separate UI for the 'Audit' tab in audit_frame
-# For example, just a label for now
+# Audit tab
 
 header_frame2 = tk.Frame(audit_frame, bg="#990000", height=150)
 header_frame2.pack(fill=tk.X, side=tk.TOP)
