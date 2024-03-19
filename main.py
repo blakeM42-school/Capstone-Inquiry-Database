@@ -159,7 +159,7 @@ def open_graph_window():
     global data
     if data is not None:
         graph_window = tk.Toplevel(root)
-        graph_window.title("Graph Customization")
+        graph_window.title("Southern Utah University - Graph Window")
 
         # Initial graph plot
         plot_graph(graph_window, graph_type_var.get(), graph_color_var.get())
