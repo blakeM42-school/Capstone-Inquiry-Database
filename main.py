@@ -191,18 +191,22 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     # Add more color types if needed as project continues
 
     # Generate graph based on selected input
-    if graph_type in ["Bar", "Line", "Scatter"]:
+    if graph_type == "Bar":
+        # For each unique value in the x-axis column, plot a bar with the mean of the y-axis values.
         for i, val in enumerate(unique_vals):
             subset = data[data[column_varX.get()] == val]
-            if graph_type == "Bar":
-                ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
-            elif graph_type == "Line":
-                ax.plot(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
-            elif graph_type == "Scatter":
-                ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+            ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
+    elif graph_type == "Line":
+        # Assuming the data is sequential or has a meaningful order. Sort if necessary.
+        data_sorted = data.sort_values(by=column_varX.get())
+        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+    elif graph_type == "Scatter":
+        # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
+        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
+        ax.axis('equal')
     elif graph_type == "Histogram":
         column_data = data[column_varX.get()]  # Actual data for the histogram
         if is_numeric_dtype(column_data): # Check if data is numeric

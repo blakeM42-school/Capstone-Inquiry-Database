@@ -117,6 +117,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         colors = plt.cm.get_cmap('nipy_spectral', len(unique_vals))
     # Add more color types if needed as project continues
 
+    # For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
     # Generate graph based on selected input
     # if graph_type in ["Bar", "Line", "Scatter"]:
     #     for i, val in enumerate(unique_vals):
