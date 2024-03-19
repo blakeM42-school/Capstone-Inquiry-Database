@@ -190,7 +190,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         colors = plt.cm.get_cmap('nipy_spectral', len(unique_vals))
 
     # Mapping categories to colors
-    color_dict = {val: colors(i) for i, val in enumerate(unique_vals)}
+    # color_dict = {val: colors(i) for i, val in enumerate(unique_vals)}
 
     # Generate graph based on selected input
     if graph_type == "Bar":
@@ -202,11 +202,22 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     elif graph_type == "Line":
         # Assuming the data is sequential or has a meaningful order. Sort if necessary.
         data_sorted = data.sort_values(by=column_varX.get())
-        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue')  # Use a single color or gradient.
+        
+        # Plot lines for each category in different colors (assuming data is sorted or sequential by 'x')
+        # for val in enumerate(unique_vals):
+        #     subset = data[data[column_varX.get()] == val].sort_values(by=column_varX())
+        #     ax.plot(subset[column_varX()], subset[column_varY()], color=color_dict[val], label=val)
 
     elif graph_type == "Scatter":
         # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
-        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))])  # Color each point uniquely or use a single color.
+        ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='FIX_ME')  # Color each point uniquely or use a single color.
+        # ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label=[val for val in enumerate(unique_vals)])  # Color each point uniquely or use a single color.
+        
+        # Plot each category with a different color
+        # for i, val in enumerate(unique_vals):
+        #     subset = data[data[column_varX.get()] == val]
+        #     ax.scatter(subset[column_varX()], subset[column_varY()], color=colors(i), label=val)
 
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
@@ -241,8 +252,9 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     # Rotate x-axis labels so they fit in window
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
     # Add legend if graph type is line or scatter
-    if graph_type in ["Line", "Scatter"]:
+    if graph_type == "Scatter":
         ax.legend(title=column_varX.get())
+        # ax.legend(title=column_varX.get(), labels=[val(i) for i in enumerate(len(unique_vals))])
 
     # Embedding the Matplotlib graph into the Tkinter GUI
     canvas = FigureCanvasTkAgg(fig, master=graph_window)

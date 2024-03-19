@@ -124,6 +124,19 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         colors = plt.cm.get_cmap('nipy_spectral', len(unique_vals))
     # Add more color types if needed as project continues
 
+    # For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
+    # Generate graph based on selected input
+    # if graph_type in ["Bar", "Line", "Scatter"]:
+    #     for i, val in enumerate(unique_vals):
+    #         subset = data[data[column_varX.get()] == val]
+    #         if graph_type == "Bar":
+    #             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Example: mean value for bars
+    #         elif graph_type == "Line":
+    #             subset_sorted = subset.sort_values(by=column_varX.get())
+    #             ax.plot(subset_sorted[column_varX.get()], subset_sorted[column_varY.get()], color=color, label=val)
+    #         elif graph_type == "Scatter":
+    #             ax.scatter(subset[column_varX.get()], subset[column_varY.get()], color=colors(i), label=val)
+
     if graph_type == "Bar":
         # For each unique value in the x-axis column, plot a bar with the mean of the y-axis values.
         for i, val in enumerate(unique_vals):
@@ -149,7 +162,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
             data_sorted = data.sort_values(by=column_varX.get())
             ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')
         elif graph_type == "Scatter":
-            ax.scatter(data[column_varX.get()], data[column_varY.get()], c='blue', label='Scatter Plot')
+            ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label=[unique_vals(i) for i in range(len(unique_vals))])
 
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()

@@ -3,10 +3,11 @@
 # [DONE] 2. Add feature for changing color palette on graph if need be
 #        2a. Add additional color palettes if need be
 # [IN PROGRESS] 3. Add more graph types [Currently have Bar, Line, Scatter, Pie, & Histogram; Maybe add Box, Clustered Bar, Column, Area, Waterfall, Dot, etc.]
-#               3a. Need to fix histogram graphing functionality
-# [DONE] 4. Make buttons side by side instead of on top of each other [DONE]
+# [DONE] 4. Make buttons side by side instead of on top of each other 
 # [IN PROGRESS] 5. Make plots interactive 
 # 6. Possibly add line of best fit to scatterplot
 # 7. Create function for scatterplot matrix
 # 8. For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
+# 9. Need to fix labels for legends in scatter and line plots
+
 # Need to ask stakeholder if she would prefer separate window containing graph or separate frame (i.e., general, audit, graph) containg graph & graphing options
