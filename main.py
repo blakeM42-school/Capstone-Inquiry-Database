@@ -287,7 +287,7 @@ filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
 filter_entry.grid(row=4, column=0, padx=10, pady=5, sticky='ew')
 
 operator_label = tk.Label(header_frame, text="Enter Operator:", fg="white", bg="#990000", font=("Helvetica", 12))
-column_label.grid(row=5, column=0, padx=10, pady=5, sticky='ew')
+operator_label.grid(row=5, column=0, padx=10, pady=5, sticky='ew')
 
 operator_combobox = ttk.Combobox(header_frame, textvariable=operator_var, state="readonly")
 operator_combobox['values'] = ['=', '<', '<=', '>', '>=']
