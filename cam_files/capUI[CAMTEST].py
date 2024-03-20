@@ -46,8 +46,8 @@ def load_csv():
                 # Currently set to 2 & 5 to open 'Pos' & 'G' columns of 'NBA' dataset for testing purposes & convenience
                 column_var.set(data.columns.tolist()[0])  # Set the default value to the first column name
                 column_var2.set(data.columns.tolist()[0])  # Set the default value to the first column name
-                column_varX.set(data.columns.tolist()[2])
-                column_varY.set(data.columns.tolist()[5])
+                column_varX.set(data.columns.tolist()[29])
+                column_varY.set(data.columns.tolist()[28])
         except UnicodeDecodeError:
             data = pd.read_csv(file_path, encoding='latin-1')
 
@@ -143,26 +143,40 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
             subset = data[data[column_varX.get()] == val]
             ax.bar(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
 
-    # elif graph_type == "Line":
-    #     # Assuming the data is sequential or has a meaningful order. Sort if necessary.
-    #     data_sorted = data.sort_values(by=column_varX.get())
-    #     ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
+    elif graph_type == "Line":
+        # Assuming the data is sequential or has a meaningful order. Sort if necessary.
+        data_sorted = data.sort_values(by=column_varX.get())
+        ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')  # Use a single color or gradient.
 
     # elif graph_type == "Scatter":
     #     # Directly plot x vs. y without grouping by unique values, assuming continuous variables.
-    #     ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label='Scatter Plot')  # Color each point uniquely or use a single color.
-            
-    elif graph_type == "Line" or graph_type == "Scatter":
-    # Convert the columns to numeric if they are not already
-        data[column_varX.get()] = convert_to_numeric(data[column_varX.get()])
-        data[column_varY.get()] = convert_to_numeric(data[column_varY.get()])
+    #     x = data[column_varX.get()]
+    #     y = data[column_varY.get()]
         
-        if graph_type == "Line":
-            # Sort data if column_varX is convertible to numeric
-            data_sorted = data.sort_values(by=column_varX.get())
-            ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue', label='Line Plot')
-        elif graph_type == "Scatter":
-            ax.scatter(data[column_varX.get()], data[column_varY.get()], c=[colors(i) for i in range(len(data))], label=[unique_vals(i) for i in range(len(unique_vals))])
+    #     ax.scatter(x, y, c='blue') 
+
+
+    elif graph_type == "Scatter":
+        # Extract x and y data
+        # x = data[column_varX.get()]
+        # y = data[column_varY.get()]
+        x = pd.to_numeric(data[column_varX.get()], errors='coerce').dropna()
+        y = pd.to_numeric(data[column_varY.get()], errors='coerce').dropna()
+
+        # Scatter plot
+        ax.scatter(x, y, c='blue', label='Data Points')
+
+        # Calculate coefficients for the line of best fit
+        m, b = np.polyfit(x, y, 1)
+
+        # Generate x values for the line of best fit (from min to max x)
+        x_fit = np.linspace(x.min(), x.max(), 100)
+
+        # Generate y values for the line of best fit
+        y_fit = m * x_fit + b
+
+        # Plot the line of best fit
+        ax.plot(x_fit, y_fit, 'r-', label=f'Best Fit: y={m:.2f}x+{b:.2f}')
 
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
@@ -193,6 +207,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         ax.set_title(f"{graph_type} of {column_varX.get()}")
 
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
+
     if graph_type in ["Line", "Scatter"]:
         ax.legend(title=column_varX.get())
 

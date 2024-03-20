@@ -1,13 +1,12 @@
 ### TO_DO LIST ###
-# [IN PROGRESS] 1. Figure out how to replace old graph with new graph [Ended up moving graphing options outside of graph window so input is entered beforehand]
-# [DONE] 2. Add feature for changing color palette on graph if need be
-#        2a. Add additional color palettes if need be
-# [IN PROGRESS] 3. Add more graph types [Currently have Bar, Line, Scatter, Pie, & Histogram; Maybe add Box, Clustered Bar, Column, Area, Waterfall, Dot, etc.]
-# [DONE] 4. Make buttons side by side instead of on top of each other 
-# [IN PROGRESS] 5. Make plots interactive 
-# 6. Possibly add line of best fit to scatterplot
-# 7. Create function for scatterplot matrix
-# 8. For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
-# 9. Need to fix labels for legends in scatter and line plots
+# 1. [DONE] Figure out how to replace old graph with new graph [Ended up moving graphing options outside of graph window so input is entered beforehand]
+# 2. [DONE] Add feature for changing color palette on graph if need be
+# 3. [DONE] Add more graph types [Currently have Bar, Line, Scatter, Pie, & Histogram; Maybe add Box, Clustered Bar, Column, Area, Waterfall, Dot, etc.]
+# 4. [DONE] Make buttons side by side instead of on top of each other 
+# 5. [MAYBE] Make plots interactive 
+# 6. [DONE] Possibly add line of best fit to scatterplot
+# 7. [MAYBE] For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
+# 8. [DONE] Need to fix labels for legends in scatter and line plots
+# 9. [DONE] Display value for each graph type (i.e., GPA of Applied Math Majors displayed on graph)
 
 # Need to ask stakeholder if she would prefer separate window containing graph or separate frame (i.e., general, audit, graph) containg graph & graphing options
