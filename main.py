@@ -307,17 +307,17 @@ column_name_combobox = ttk.Combobox(header_frame, textvariable=column_var1, stat
 column_name_combobox.grid(row=2, column=0, padx=10, pady=5, sticky='ew')
 
 filter_label = tk.Label(header_frame, text="Enter Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
-filter_label.grid(row=3, column=0, padx=10, pady=5, sticky='ew')
+filter_label.grid(row=5, column=0, padx=10, pady=5, sticky='ew')
 
 filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-filter_entry.grid(row=4, column=0, padx=10, pady=5, sticky='ew')
+filter_entry.grid(row=6, column=0, padx=10, pady=5, sticky='ew')
 
 operator_label = tk.Label(header_frame, text="Enter Operator:", fg="white", bg="#990000", font=("Helvetica", 12))
-operator_label.grid(row=5, column=0, padx=10, pady=5, sticky='ew')
+operator_label.grid(row=3, column=0, padx=10, pady=5, sticky='ew')
 
 operator_combobox = ttk.Combobox(header_frame, textvariable=operator_var, state="readonly")
 operator_combobox['values'] = ['=', '<', '<=', '>', '>=']
-operator_combobox.grid(row=6, column=0, padx=10, pady=5, sticky='ew')
+operator_combobox.grid(row=4, column=0, padx=10, pady=5, sticky='ew')
 operator_var.set('=')
 
 # Additional filter conditions
@@ -328,17 +328,17 @@ column_name_combobox2 = ttk.Combobox(header_frame, textvariable=column_var2, sta
 column_name_combobox2.grid(row=2, column=1, padx=10, pady=5, sticky='ew')
 
 additional_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
-additional_filter_label.grid(row=3, column=1, padx=10, pady=5, sticky='ew')
+additional_filter_label.grid(row=5, column=1, padx=10, pady=5, sticky='ew')
 
 additional_filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-additional_filter_entry.grid(row=4, column=1, padx=10, pady=5, sticky='ew')
+additional_filter_entry.grid(row=6, column=1, padx=10, pady=5, sticky='ew')
 
 operator_label2 = tk.Label(header_frame, text="Enter Operator:", fg="white", bg="#990000", font=("Helvetica", 12))
-operator_label2.grid(row=5, column=1, padx=10, pady=5, sticky='ew')
+operator_label2.grid(row=3, column=1, padx=10, pady=5, sticky='ew')
 
 operator_combobox2 = ttk.Combobox(header_frame, textvariable=operator_var2, state="readonly")
 operator_combobox2['values'] = ['=', '<', '<=', '>', '>=']
-operator_combobox2.grid(row=6, column=1, padx=10, pady=5, sticky='ew')
+operator_combobox2.grid(row=4, column=1, padx=10, pady=5, sticky='ew')
 operator_var2.set('=')
 
 #last filter conditions
@@ -349,18 +349,18 @@ column_name_combobox4 = ttk.Combobox(header_frame, textvariable=column_var3, sta
 column_name_combobox4.grid(row=2, column=2, padx=10, pady=5, sticky='ew')
 
 last_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
-last_filter_label.grid(row=3, column=2, padx=10, pady=5, sticky='ew')
+last_filter_label.grid(row=5, column=2, padx=10, pady=5, sticky='ew')
 
 
 last_filter_entry = tk.Entry(header_frame, font=("Helvetica", 12))
-last_filter_entry.grid(row=4, column=2, padx=10, pady=5, sticky='ew')
+last_filter_entry.grid(row=6, column=2, padx=10, pady=5, sticky='ew')
 
 operator_label3 = tk.Label(header_frame, text="Enter Operator:", fg="white", bg="#990000", font=("Helvetica", 12))
-operator_label3.grid(row=5, column=2, padx=10, pady=5, sticky='ew')
+operator_label3.grid(row=3, column=2, padx=10, pady=5, sticky='ew')
 
 operator_combobox3 = ttk.Combobox(header_frame, textvariable=operator_var3, state="readonly")
 operator_combobox3['values'] = ['=', '<', '<=', '>', '>=']
-operator_combobox3.grid(row=6, column=2, padx=10, pady=5, sticky='ew')
+operator_combobox3.grid(row=4, column=2, padx=10, pady=5, sticky='ew')
 operator_var3.set('=')
 
 filter_button = tk.Button(header_frame, text="Filter and Save", command=filter_and_save, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
