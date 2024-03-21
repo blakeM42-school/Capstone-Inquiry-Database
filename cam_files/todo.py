@@ -5,8 +5,7 @@
 # 4. [DONE] Make buttons side by side instead of on top of each other 
 # 5. [MAYBE] Make plots interactive 
 # 6. [DONE] Possibly add line of best fit to scatterplot
-# 7. [MAYBE] For graph types, when selecting graph type to process, only offer variables that would be graphable given graph type
-# 8. [DONE] Need to fix labels for legends in scatter and line plots
-# 9. [DONE] Display value for each graph type (i.e., GPA of Applied Math Majors displayed on graph)
+# 7. [DONE] Need to fix labels for legends in scatter and line plots
+# 8. [DONE] Display value for each graph type (i.e., GPA of Applied Math Majors displayed on graph)
 
 # Need to ask stakeholder if she would prefer separate window containing graph or separate frame (i.e., general, audit, graph) containg graph & graphing options

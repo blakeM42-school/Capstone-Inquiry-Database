@@ -204,11 +204,14 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         for i, val in enumerate(unique_vals):
             subset = data[data[column_varX.get()] == val]
             ax.barh(val, subset[column_varY.get()].mean(), color=colors(i))  # Use mean or another aggregate for bars.
+            ax.tick_params(axis='y', labelrotation=45, labelsize=8)
             labs = ax.barh(val, subset[column_varY.get()].mean(), color=colors(i))
             ax.bar_label(labs)
 
     elif graph_type == "Line":
         data_sorted = data.sort_values(by=column_varX.get())
+        # x = pd.to_numeric(data_sorted[column_varX.get()], errors='coerce').dropna()
+        # y = pd.to_numeric(data_sorted[column_varY.get()], errors='coerce').dropna()
         ax.plot(data_sorted[column_varX.get()], data_sorted[column_varY.get()], color='blue') 
         
     elif graph_type == "Scatter":
@@ -220,6 +223,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         x_fit = np.linspace(x.min(), x.max(), 100) # Generate x values for the line of best fit (from min to max x)
         y_fit = m * x_fit + b # Generate y values for the line of best fit
         ax.plot(x_fit, y_fit, 'r-', label=f'Best Fit: y={m:.2f}x+{b:.2f}') # Plot the line of best fit
+        ax.legend()
         
     elif graph_type == "Pie":
         counts = data[column_varX.get()].value_counts()
@@ -254,10 +258,6 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
 
     # Rotate x-axis labels so they fit in window
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
-
-    # Add legend for data points and line of best fit if graph type is scatter
-    if graph_type == "Scatter":
-        ax.legend()
 
     # Have graph fit to borders of window
     fig.tight_layout()
