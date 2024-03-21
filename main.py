@@ -27,6 +27,13 @@ column_varY = tk.StringVar(root)
 
 data = None  # Global variable to store loaded data
 
+def display_data(dataframe):
+    """Display the given DataFrame in the table_frame."""
+    for widget in table_frame.winfo_children():
+        widget.destroy()
+    table = Table(table_frame, dataframe=dataframe, showstatusbar=True)
+    table.show()
+
 def load_csv():
     """Load a CSV file and display its contents."""
     global data, column_var1, column_var2, column_var3, column_var_audit, column_varX, column_varY  # Use the global variable to store loaded data
@@ -34,10 +41,12 @@ def load_csv():
     if file_path:
         try:
             data = pd.read_csv(file_path, encoding='utf-8')
-            for widget in table_frame.winfo_children():
-                widget.destroy()
-            table = Table(table_frame, dataframe=data, showstatusbar=True) # Removed 'showtoolbar' option from table, can add back later if need be/want to
-            table.show()
+            # for widget in table_frame.winfo_children():
+            #     widget.destroy()
+            # table = Table(table_frame, dataframe=data, showstatusbar=True) # Removed 'showtoolbar' option from table, can add back later if need be/want to
+            # table.show()
+
+            display_data(data)
             
             columns = data.columns.tolist()
             column_name_combobox['values'] = columns
@@ -138,6 +147,7 @@ def filter_and_save():
             save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
             if save_path:
                 result.to_csv(save_path, index=False)
+                display_data(pd.read_csv(save_path))
         else:
             tk.messagebox.showinfo("No results", "The filter conditions did not match any data.")
     else:
