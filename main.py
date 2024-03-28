@@ -239,6 +239,7 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         counts = data[column_varX.get()].value_counts()
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', colors=[colors(i) for i in range(len(counts))])
         ax.axis('equal')
+        ax.legend()
 
     elif graph_type == "Histogram":
         column_data = data[column_varX.get()] # Actual data for the histogram 
@@ -249,7 +250,6 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
             ax.plot(bins, y, '--', color='red')  # Red dashed line for best fit
         else: # Display error and close graph window if data is not numeric
             tk.messagebox.showwarning(title=None, message="Invalid type of data. Please enter numeric data.")
-            graph_window.exit()
 
     # Set labels for graph
     ax.set_xlabel(column_varX.get())
@@ -268,6 +268,11 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
     if graph_type == "Horizontal Bar":
         ax.set_xlabel(column_varY.get())
         ax.set_ylabel(f"Mean of {column_varX.get()}")
+
+    if graph_type == "Pie":
+        ax.set_xlabel("")
+        ax.set_ylabel("")
+        ax.set_title(f"Pie Graph of {column_varX.get()}")
 
     # Rotate x-axis labels so they fit in window
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
