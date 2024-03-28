@@ -261,10 +261,13 @@ def plot_graph(graph_window, graph_type, colors, color='blue'):
         ax.set_ylabel("Density")
         ax.set_title(f"{graph_type} of {column_varX.get()}")
 
+    if graph_type == "Bar":
+        ax.set_ylabel(f"Mean of {column_varY.get()}")
+
     # Adjust labels if horizontal bar graph
     if graph_type == "Horizontal Bar":
         ax.set_xlabel(column_varY.get())
-        ax.set_ylabel(column_varX.get())
+        ax.set_ylabel(f"Mean of {column_varX.get()}")
 
     # Rotate x-axis labels so they fit in window
     ax.tick_params(axis='x', labelrotation=45, labelsize=8)
