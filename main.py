@@ -12,6 +12,7 @@ data5 = None  # Global variable to store loaded data for the fifth tab
 data6 = None  # Global variable to store loaded data for the sixth tab
 data7 = None  # Global variable to store loaded data for the seventh tab
 
+# changes
 def load_csv(tab_num):
     """Load a CSV file and display its contents."""
     global data1, data2, data3, data4, data5, data6, data7
