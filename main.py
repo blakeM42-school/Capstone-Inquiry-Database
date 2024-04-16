@@ -297,9 +297,11 @@ class GraphNavigationToolbar(NavigationToolbar2Tk):
 notebook = ttk.Notebook(root)
 
 general_frame = ttk.Frame(notebook)  # General tab content
+audit_frame = ttk.Frame(notebook)    # Audit tab content
 # graph_frame = ttk.Frame(notebook)    # Graph tab content
 
 notebook.add(general_frame, text='General')
+notebook.add(audit_frame, text='Audit')
 notebook.pack(expand=True, fill='both')
 
 header_frame = tk.Frame(general_frame, bg="#990000", height=150)
@@ -384,7 +386,34 @@ filter_button.grid(row=7, column=1, columnspan=1, sticky='ew', padx=10, pady=10)
 
 table_frame = tk.Frame(root)
 table_frame.pack(fill=tk.BOTH, expand=True)
+# Audit tab
 
+header_frame2 = tk.Frame(audit_frame, bg="#990000", height=150)
+header_frame2.pack(fill=tk.X, side=tk.TOP)
+
+footer_frame2 = tk.Frame(audit_frame, bg="#cc0000", height=50)
+footer_frame2.pack(fill=tk.X, side=tk.BOTTOM)
+
+user_label2 = tk.Label(footer_frame2, fg="white", bg="#cc0000", font=("Helvetica", 12))
+user_label2.pack(side=tk.LEFT, padx=10)
+
+upload_button2 = tk.Button(header_frame2, text="Upload CSV", command=load_csv, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button2.pack(pady=5)
+
+column_name_combobox3 = ttk.Combobox(header_frame2, textvariable=column_var_audit, state="readonly")
+column_name_combobox3.pack(pady=5)
+
+filter_label2 = tk.Label(header_frame2, text="Enter Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
+filter_label2.pack(pady=5)
+
+filter_entry2 = tk.Entry(header_frame2, font=("Helvetica", 12))
+filter_entry2.pack(pady=5)
+
+filter_button2 = tk.Button(header_frame2, text="Filter and Save", command=filter_and_save, bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+filter_button2.pack(pady=5)
+
+table_frame2 = tk.Frame(root)
+table_frame2.pack(fill=tk.BOTH, expand=True)
 
 # Items for graphing purposes
 graph_button_frame = tk.Frame(root) # Frame/box for graphing options/buttons
@@ -426,9 +455,3 @@ ttk.Button(root, text="Open Graph Window", command=open_graph_window).pack(side=
 # Continue with the rest of your application setup
 
 root.mainloop()
-
-
-
-
-
-
