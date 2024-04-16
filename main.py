@@ -585,7 +585,7 @@ notebook.add(tab1, text='Seats Filled')
 header_frame1 = tk.Frame(tab1, bg="#990000", height=150)
 header_frame1.pack(fill=tk.X, side=tk.TOP)
 
-upload_button1 = tk.Button(header_frame1, text="Upload CSV", command=lambda: load_csv(1), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button1 = tk.Button(header_frame1, text="Upload CSV", command=lambda: load_csv_for_audits(1), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button1.pack(pady=5)
 
 filter_label1 = tk.Label(header_frame1, text="Enter Filter Condition for TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -613,7 +613,7 @@ notebook.add(tab2, text='Total Majors')
 header_frame2 = tk.Frame(tab2, bg="#990000", height=150)
 header_frame2.pack(fill=tk.X, side=tk.TOP)
 
-upload_button2 = tk.Button(header_frame2, text="Upload CSV", command=lambda: load_csv(2), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button2 = tk.Button(header_frame2, text="Upload CSV", command=lambda: load_csv_for_audits(2), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button2.pack(pady=5)
 
 filter_label3 = tk.Label(header_frame2, text="Enter Filter Condition for TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -641,7 +641,7 @@ notebook.add(tab3, text='Percent Male/Female')
 header_frame3 = tk.Frame(tab3, bg="#990000", height=150)
 header_frame3.pack(fill=tk.X, side=tk.TOP)
 
-upload_button3 = tk.Button(header_frame3, text="Upload CSV", command=lambda: load_csv(3), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button3 = tk.Button(header_frame3, text="Upload CSV", command=lambda: load_csv_for_audits(3), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button3.pack(pady=5)
 
 filter_label5 = tk.Label(header_frame3, text="Enter Filter Condition for TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -675,7 +675,7 @@ notebook.add(tab4, text='Degree Type')
 header_frame4 = tk.Frame(tab4, bg="#990000", height=150)
 header_frame4.pack(fill=tk.X, side=tk.TOP)
 
-upload_button4 = tk.Button(header_frame4, text="Upload CSV", command=lambda: load_csv(4), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button4 = tk.Button(header_frame4, text="Upload CSV", command=lambda: load_csv_for_audits(4), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button4.pack(pady=5)
 
 filter_label8 = tk.Label(header_frame4, text="TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -709,7 +709,7 @@ notebook.add(tab5, text='Class Standing')
 header_frame5 = tk.Frame(tab5, bg="#990000", height=150)
 header_frame5.pack(fill=tk.X, side=tk.TOP)
 
-upload_button5 = tk.Button(header_frame5, text="Upload CSV", command=lambda: load_csv(5), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button5 = tk.Button(header_frame5, text="Upload CSV", command=lambda: load_csv_for_audits(5), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button5.pack(pady=5)
 
 filter_label11 = tk.Label(header_frame5, text="TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -743,7 +743,7 @@ notebook.add(tab6, text='Race/Ethnicity')
 header_frame6 = tk.Frame(tab6, bg="#990000", height=150)
 header_frame6.pack(fill=tk.X, side=tk.TOP)
 
-upload_button6 = tk.Button(header_frame6, text="Upload CSV", command=lambda: load_csv(6), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button6 = tk.Button(header_frame6, text="Upload CSV", command=lambda: load_csv_for_audits(6), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button6.pack(pady=5)
 
 filter_label14 = tk.Label(header_frame6, text="TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
@@ -781,7 +781,7 @@ header_frame7.pack(fill=tk.X, side=tk.TOP)
 user_label = tk.Label(header_frame7, fg="white", bg="#990000", font=("Helvetica", 12))
 user_label.pack(side=tk.LEFT, padx=10)
 
-upload_button7 = tk.Button(header_frame7, text="Upload CSV", command=lambda: load_csv(7), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
+upload_button7 = tk.Button(header_frame7, text="Upload CSV", command=lambda: load_csv_for_audits(7), bg="#0066cc", fg="white", font=("Helvetica", 12), bd=0)
 upload_button7.pack(pady=5)
 
 filter_label17 = tk.Label(header_frame7, text="TERM_DESC:", fg="white", bg="#990000", font=("Helvetica", 12))
