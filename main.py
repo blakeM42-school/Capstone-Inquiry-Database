@@ -147,6 +147,7 @@ def filter_and_save():
             save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
             if save_path:
                 result.to_csv(save_path, index=False)
+                data = result
                 display_data(pd.read_csv(save_path))
         else:
             tk.messagebox.showinfo("No results", "The filter conditions did not match any data.")
