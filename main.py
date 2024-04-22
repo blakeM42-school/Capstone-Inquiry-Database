@@ -245,7 +245,7 @@ def load_csv():
             column_name_combobox['values'] = columns
             column_name_combobox2['values'] = columns
             column_name_combobox3['values'] = columns
-            column_name_combobox4['values'] = columns
+            # column_name_combobox4['values'] = columns
             column_menu1['values'] = columns
             column_menu2['values'] = columns
             if columns:
@@ -340,6 +340,7 @@ def filter_and_save():
             save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
             if save_path:
                 result.to_csv(save_path, index=False)
+                data = result
                 display_data(pd.read_csv(save_path))
         else:
             tk.messagebox.showinfo("No results", "The filter conditions did not match any data.")
@@ -554,8 +555,8 @@ operator_var2.set('=')
 last_column_label = tk.Label(header_frame, text="Enter Additional Column Name:", fg="white", bg="#990000", font=("Helvetica", 12))
 last_column_label.grid(row=1, column=2, padx=10, pady=5, sticky='ew')
 
-column_name_combobox4 = ttk.Combobox(header_frame, textvariable=column_var3, state="readonly")
-column_name_combobox4.grid(row=2, column=2, padx=10, pady=5, sticky='ew')
+column_name_combobox3 = ttk.Combobox(header_frame, textvariable=column_var3, state="readonly")
+column_name_combobox3.grid(row=2, column=2, padx=10, pady=5, sticky='ew')
 
 last_filter_label = tk.Label(header_frame, text="Enter Additional Filter Condition:", fg="white", bg="#990000", font=("Helvetica", 12))
 last_filter_label.grid(row=5, column=2, padx=10, pady=5, sticky='ew')
